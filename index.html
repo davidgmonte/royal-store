@@ -204,6 +204,17 @@
   </style>
 </head>
 <body>
+    <script>
+  const senhaCorreta = "ROYAL2026";
+
+  const senha = prompt("Área restrita — Digite a senha:");
+
+  if (senha !== senhaCorreta) {
+    document.body.innerHTML = "";
+    alert("Acesso negado");
+    window.location.href = "https://google.com";
+  }
+</script>
   <div class="window">
     <div class="header">
       <div class="logo-wrap">
