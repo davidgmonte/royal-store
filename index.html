@@ -47,7 +47,7 @@
       backdrop-filter: blur(25px);
     }
 
-    /* Cabeçalho com Logo MUITO MAIOR */
+    /* Cabeçalho */
     .header{
       grid-column:1/-1;
       display:flex;
@@ -58,7 +58,7 @@
     }
 
     .logo-wrap {
-      width:180px; /* Logo maior conforme solicitado */
+      width:180px;
       height:180px;
       border-radius:22px;
       display:flex;
@@ -72,8 +72,8 @@
     .logo-wrap:hover { border-color: var(--accent); transform: scale(1.02); }
 
     .logo-wrap img {
-      width:100%;
-      height:100%;
+      width:150%;
+      height:150%;
       object-fit:contain;
       filter: drop-shadow(0 0 12px rgba(43,255,93,0.4));
     }
@@ -81,7 +81,7 @@
     .title{font-size:32px;color:white;font-weight:900;letter-spacing:-1.5px}
     .subtitle{font-size:14px;color:var(--accent);font-weight:600;letter-spacing:1px;text-transform:uppercase}
 
-    /* Sidebar com Scroll Ajustado */
+    /* Sidebar */
     .sidebar{
       background:var(--card);
       border-radius:var(--radius);
@@ -149,22 +149,10 @@
 
     .controls-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
 
-    /* Inputs e Sliders */
-    select, input[type=number]{
+    select{
       width:100%; padding:12px; border-radius:10px;
       background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1);
       color:white; outline:none; font-size:13px;
-    }
-
-    input[type=range] {
-      -webkit-appearance: none; width: 100%; background: transparent;
-    }
-    input[type=range]::-webkit-slider-runnable-track {
-      width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px;
-    }
-    input[type=range]::-webkit-slider-thumb {
-      -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%;
-      background: var(--accent); margin-top: -6px; box-shadow: 0 0 10px var(--accent);
     }
 
     /* Preview Box */
@@ -201,20 +189,25 @@
       .window{grid-template-columns:1fr; height:90vh; overflow-y:auto;}
       .logo-wrap { width:120px; height:120px; }
     }
+
+    /* === SLIDER DE SENSIBILIDADE === */
+    .sens-slider { width: 100%; cursor: pointer; height: 20px; position: relative; margin-top: 10px; }
+    .sens-track { height: 8px; background: rgba(255,255,255,0.15); border-radius: 10px; position: relative; top: 6px; }
+    .sens-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 10px; box-shadow: 0 0 15px rgba(43,255,93,0.6); }
+    .sens-thumb { width: 18px; height: 18px; background: var(--accent); border-radius: 50%; position: absolute; top: 50%; right: 100%; transform: translate(50%, -50%); box-shadow: 0 0 15px rgba(43,255,93,1); }
   </style>
 </head>
 <body>
-    <script>
-  const senhaCorreta = "ROYAL2026";
+  <script>
+    const senhaCorreta = "ROYAL2026";
+    const senha = prompt("Área restrita — Digite a senha:");
+    if (senha !== senhaCorreta) {
+      document.body.innerHTML = "";
+      alert("Acesso negado");
+      window.location.href = "https://google.com";
+    }
+  </script>
 
-  const senha = prompt("Área restrita — Digite a senha:");
-
-  if (senha !== senhaCorreta) {
-    document.body.innerHTML = "";
-    alert("Acesso negado");
-    window.location.href = "https://google.com";
-  }
-</script>
   <div class="window">
     <div class="header">
       <div class="logo-wrap">
@@ -233,27 +226,22 @@
     <aside class="sidebar">
       <div>
         <div class="section-title">Aimbot Config</div>
-        
         <div class="control">
           <div class="label"><strong>FULL CAPA</strong><span>100% HS Precisão</span></div>
           <div class="switch" data-key="fullcapa"><div class="knob"></div></div>
         </div>
-
         <div class="control">
           <div class="label"><strong>HEADTRICK</strong><span>Alvo Inteligente</span></div>
           <div class="switch" data-key="headtrick"><div class="knob"></div></div>
         </div>
-
         <div class="control">
           <div class="label"><strong>AIMBOT 2X</strong><span>Modo 2X Precisão</span></div>
           <div class="switch" data-key="aim2x"><div class="knob"></div></div>
         </div>
-
         <div class="control">
           <div class="label"><strong>AIMBOT 4X</strong><span>Modo 4X Precisão</span></div>
           <div class="switch" data-key="aim4x"><div class="knob"></div></div>
         </div>
-
         <div class="control">
           <div class="label"><strong>NO RECOIL</strong><span>Bala não espalha</span></div>
           <div class="switch" data-key="norecoil"><div class="knob"></div></div>
@@ -277,25 +265,32 @@
       <div class="card controls-grid">
         <div>
           <div class="section-title">Ajustes de Engine</div>
-          <label>
-            <div style="font-size:12px; margin-bottom:8px">Sensibilidade de Arrasto</div>
-            <input id="sensRange" type="range" min="1" max="100" value="100" />
-          </label>
-          <label style="margin-top:15px; display:block">
-            <div style="font-size:12px; margin-bottom:8px">Otimização de Resposta</div>
-            <button class="btn" id="optBtn" style="width:100%; border-color:var(--accent)">OTIMIZAR DISPOSITIVO</button>
-          </label>
+          <div style="font-size:12px; margin-bottom:8px">Sensibilidade de Arrasto</div>
+          <div class="sens-slider" id="sensSlider">
+            <div class="sens-track">
+              <div class="sens-fill" id="sensFill"></div>
+              <div class="sens-thumb" id="sensThumb"></div>
+            </div>
+          </div>
+          <div style="font-size:12px; margin-top:15px; margin-bottom:8px">
+  Otimização de Resposta
+</div>
+
+<button class="btn" id="optBtn" style="width:100%; border-color:var(--accent)">
+  OTIMIZAR DISPOSITIVO
+</button>
         </div>
         <div>
           <div class="section-title">Alvo Prioritário</div>
-          <label>
-            <div style="font-size:12px; margin-bottom:8px">Travar no Osso:</div>
-            <select id="boneSelect">
-              <option value="head">CABEÇA (Full Capa)</option>
-              <option value="neck">PESCOÇO</option>
-              <option value="chest">PEITO</option>
-            </select>
-          </label>
+          <div style="font-size:12px; margin-bottom:8px">Travar no Osso:</div>
+          <select id="boneSelect">
+            <option value="head">CABEÇA (Full Capa)</option>
+            <option value="neck">PESCOÇO</option>
+            <option value="chest">PEITO</option>
+          </select>
+          <button class="btn" id="resetBtn" style="width:100%; margin-top:12px">
+            LIMPAR SISTEMA
+          </button>
         </div>
       </div>
 
@@ -308,8 +303,7 @@
       </div>
 
       <div class="footer">
-        <button class="btn" id="resetBtn">Limpar Cache</button>
-        <button class="btn primary" id="saveBtn" style="background:white; color:black">Salvar Config</button>
+        <button class="btn primary" id="saveBtn" style="background:white; color:black; width:100%">Salvar Config</button>
       </div>
     </main>
   </div>
@@ -360,6 +354,30 @@
     document.getElementById('saveBtn').onclick = () => {
         alert("Configuração de 100% HS salva.");
     }
+
+    const slider = document.getElementById("sensSlider");
+    const fill = document.getElementById("sensFill");
+    const thumb = document.getElementById("sensThumb");
+    let dragging = false;
+
+    function updateSlider(x) {
+      const r = slider.getBoundingClientRect();
+      let p = (x - r.left) / r.width;
+      p = Math.max(0, Math.min(1, p));
+      fill.style.width = (p * 100) + "%";
+      thumb.style.right = (100 - (p * 100)) + "%";
+    }
+
+    slider.onmousedown = e => { dragging = true; updateSlider(e.clientX); };
+    window.onmousemove = e => dragging && updateSlider(e.clientX);
+    window.onmouseup   = () => dragging = false;
+
+    slider.ontouchstart = e => { dragging = true; updateSlider(e.touches[0].clientX); };
+    slider.ontouchmove  = e => dragging && updateSlider(e.touches[0].clientX);
+    slider.ontouchend   = () => dragging = false;
+
+    fill.style.width = "50%";
+    thumb.style.right = "50%";
   </script>
 </body>
 </html>
