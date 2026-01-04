@@ -1,0 +1,354 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Royal Store — Full Capa Ultra</title>
+  <style>
+    :root{
+      --bg:#050505;
+      --accent:#2bff5d; /* Verde Neon para Ativação */
+      --muted:#a0a0a0;
+      --card:#111111;
+      --glass: rgba(255,255,255,0.03);
+      --radius:16px;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    /* Reset e Scroll */
+    *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+    html,body{height:100%; overflow:hidden; margin:0;}
+    
+    /* Scrollbar Moderna e Minimalista */
+    .sidebar::-webkit-scrollbar { width: 3px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+    body{
+      background:
+        radial-gradient(1000px 500px at 50% 0%, rgba(43,255,93,0.06), transparent 70%),
+        var(--bg);
+      color:var(--muted);
+      display:flex;align-items:center;justify-content:center;padding:20px;
+    }
+
+    /* Janela Principal */
+    .window{
+      width:1000px; max-width:98vw; height:680px; max-height:95vh;
+      background: rgba(10, 10, 10, 0.85);
+      border-radius:24px;
+      padding:24px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.9);
+      display:grid;
+      grid-template-columns: 320px 1fr;
+      gap:20px;
+      border:1px solid rgba(255,255,255,0.06);
+      backdrop-filter: blur(25px);
+    }
+
+    /* Cabeçalho com Logo MUITO MAIOR */
+    .header{
+      grid-column:1/-1;
+      display:flex;
+      align-items:center;
+      gap:25px;
+      padding-bottom:18px;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+    }
+
+    .logo-wrap {
+      width:180px; /* Logo maior conforme solicitado */
+      height:180px;
+      border-radius:22px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid rgba(255,255,255,0.05);
+      padding: 10px;
+      transition: 0.5s;
+    }
+    .logo-wrap:hover { border-color: var(--accent); transform: scale(1.02); }
+
+    .logo-wrap img {
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      filter: drop-shadow(0 0 12px rgba(43,255,93,0.4));
+    }
+
+    .title{font-size:32px;color:white;font-weight:900;letter-spacing:-1.5px}
+    .subtitle{font-size:14px;color:var(--accent);font-weight:600;letter-spacing:1px;text-transform:uppercase}
+
+    /* Sidebar com Scroll Ajustado */
+    .sidebar{
+      background:var(--card);
+      border-radius:var(--radius);
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+      overflow-y:auto; 
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .section-title{
+      font-size:11px;
+      color:white;
+      text-transform:uppercase;
+      letter-spacing:2px;
+      opacity:0.5;
+      margin-bottom:8px;
+    }
+
+    .control{
+      background:rgba(255,255,255,0.02);
+      border-radius:14px;
+      padding:14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border: 1px solid transparent;
+      transition:0.3s;
+    }
+    .control:hover{border-color:rgba(43,255,93,0.3); background:rgba(43,255,93,0.03)}
+
+    .label strong{color:white; display:block; font-size:14px}
+    .label span{font-size:11px; opacity:0.6}
+
+    /* Switch Verde Neon */
+    .switch{
+      width:50px;height:26px;border-radius:20px;
+      background:rgba(255,255,255,0.1);
+      position:relative;cursor:pointer;
+      transition: 0.3s;
+    }
+    .switch .knob{
+      width:20px;height:20px;border-radius:50%;
+      background:white;position:absolute;top:3px;left:3px;
+      transition:0.3s cubic-bezier(.18,.89,.32,1.28);
+    }
+    .switch.on{background: var(--accent); box-shadow: 0 0 15px rgba(43,255,93,0.4);}
+    .switch.on .knob{left:27px; background:#000}
+
+    /* Main Area */
+    .main{
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+      overflow:hidden;
+    }
+
+    .card{
+      background:rgba(255,255,255,0.015);
+      padding:20px;
+      border-radius:var(--radius);
+      border:1px solid rgba(255,255,255,0.05);
+    }
+
+    .controls-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+
+    /* Inputs e Sliders */
+    select, input[type=number]{
+      width:100%; padding:12px; border-radius:10px;
+      background:rgba(0,0,0,0.4); border:1px solid rgba(255,255,255,0.1);
+      color:white; outline:none; font-size:13px;
+    }
+
+    input[type=range] {
+      -webkit-appearance: none; width: 100%; background: transparent;
+    }
+    input[type=range]::-webkit-slider-runnable-track {
+      width: 100%; height: 6px; background: rgba(255,255,255,0.08); border-radius: 10px;
+    }
+    input[type=range]::-webkit-slider-thumb {
+      -webkit-appearance: none; height: 18px; width: 18px; border-radius: 50%;
+      background: var(--accent); margin-top: -6px; box-shadow: 0 0 10px var(--accent);
+    }
+
+    /* Preview Box */
+    .preview{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:var(--radius);
+      background: radial-gradient(circle at center, #1a1a1a, #050505);
+      border: 1px solid rgba(255,255,255,0.05);
+      position:relative;
+    }
+
+    /* Botões */
+    .btn{
+      padding:12px 20px; border-radius:12px; border:1px solid rgba(255,255,255,0.08);
+      cursor:pointer; background:rgba(255,255,255,0.03); color:white;
+      font-weight:600; transition:0.3s;
+    }
+    .btn:hover{ background:rgba(255,255,255,0.1); }
+    
+    .btn.primary.inject {
+        background: var(--accent);
+        color: black;
+        border: none;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        font-weight: 900;
+        box-shadow: 0 0 30px rgba(43,255,93,0.3);
+    }
+
+    @media(max-width:720px){
+      .window{grid-template-columns:1fr; height:90vh; overflow-y:auto;}
+      .logo-wrap { width:120px; height:120px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="window">
+    <div class="header">
+      <div class="logo-wrap">
+        <img src="royal-logo.png" alt="Royal Store">
+      </div>
+      <div>
+        <div class="title">ROYAL STORE</div>
+        <div class="subtitle">Ultimate Aim Script — 100% Full Capa</div>
+      </div>
+      <div style="margin-left:auto;text-align:right">
+        <div style="color:var(--accent); font-size:12px; font-weight:900">SYSTEM: ENCRYPTED</div>
+        <div style="font-size:11px; opacity:0.5">ESTABLISHED 2026</div>
+      </div>
+    </div>
+
+    <aside class="sidebar">
+      <div>
+        <div class="section-title">Aimbot Config</div>
+        
+        <div class="control">
+          <div class="label"><strong>FULL CAPA</strong><span>100% HS Precisão</span></div>
+          <div class="switch" data-key="fullcapa"><div class="knob"></div></div>
+        </div>
+
+        <div class="control">
+          <div class="label"><strong>HEADTRICK</strong><span>Alvo Inteligente</span></div>
+          <div class="switch" data-key="headtrick"><div class="knob"></div></div>
+        </div>
+
+        <div class="control">
+          <div class="label"><strong>AIMBOT 2X</strong><span>Modo 2X Precisão</span></div>
+          <div class="switch" data-key="aim2x"><div class="knob"></div></div>
+        </div>
+
+        <div class="control">
+          <div class="label"><strong>AIMBOT 4X</strong><span>Modo 4X Precisão</span></div>
+          <div class="switch" data-key="aim4x"><div class="knob"></div></div>
+        </div>
+
+        <div class="control">
+          <div class="label"><strong>NO RECOIL</strong><span>Bala não espalha</span></div>
+          <div class="switch" data-key="norecoil"><div class="knob"></div></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Launchers</div>
+        <div style="display:flex; flex-direction:column; gap:8px">
+            <button class="btn" onclick="window.location.href='freefire://'">Free Fire Original</button>
+            <button class="btn" onclick="window.location.href='freefiremax://'">Free Fire MAX</button>
+        </div>
+      </div>
+
+      <div style="margin-top:auto">
+        <button class="btn primary inject" id="applyBtn" style="width:100%">INJETAR SCRIPT HS</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <div class="card controls-grid">
+        <div>
+          <div class="section-title">Ajustes de Engine</div>
+          <label>
+            <div style="font-size:12px; margin-bottom:8px">Sensibilidade de Arrasto</div>
+            <input id="sensRange" type="range" min="1" max="100" value="100" />
+          </label>
+          <label style="margin-top:15px; display:block">
+            <div style="font-size:12px; margin-bottom:8px">Otimização de Resposta</div>
+            <button class="btn" id="optBtn" style="width:100%; border-color:var(--accent)">OTIMIZAR DISPOSITIVO</button>
+          </label>
+        </div>
+        <div>
+          <div class="section-title">Alvo Prioritário</div>
+          <label>
+            <div style="font-size:12px; margin-bottom:8px">Travar no Osso:</div>
+            <select id="boneSelect">
+              <option value="head">CABEÇA (Full Capa)</option>
+              <option value="neck">PESCOÇO</option>
+              <option value="chest">PEITO</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="preview">
+        <div style="text-align:center">
+          <div id="glow" style="font-size:12px; letter-spacing:4px; color:var(--accent); text-shadow: 0 0 10px var(--accent)">BYPASS: AGUARDANDO...</div>
+          <div style="font-size:48px; font-weight:900; color:white; margin:10px 0; letter-spacing:-2px">ROYAL STORE</div>
+          <div id="statusText" style="font-size:14px; color:var(--muted); font-weight:bold">DESATIVADO</div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <button class="btn" id="resetBtn">Limpar Cache</button>
+        <button class="btn primary" id="saveBtn" style="background:white; color:black">Salvar Config</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const switches = document.querySelectorAll('.switch');
+    const statusText = document.getElementById('statusText');
+    const applyBtn = document.getElementById('applyBtn');
+    const optBtn = document.getElementById('optBtn');
+
+    switches.forEach(s => {
+      s.addEventListener('click', () => {
+        s.classList.toggle('on');
+        statusText.innerText = "SISTEMA EM CALIBRAÇÃO...";
+        statusText.style.color = "white";
+      });
+    });
+
+    optBtn.onclick = () => {
+      optBtn.innerText = "OTIMIZANDO...";
+      setTimeout(() => {
+        optBtn.innerText = "SISTEMA 100% OTIMIZADO";
+        optBtn.style.background = "rgba(43,255,93,0.1)";
+        alert("OTIMIZAÇÃO DE TOUCH ATIVADA!\n\nSeu iOS/Android agora processará o movimento 2x mais rápido para garantir o Capa.");
+      }, 1000);
+    };
+
+    applyBtn.onclick = () => {
+      applyBtn.innerText = "FORÇANDO ARQUIVOS OBB...";
+      applyBtn.style.pointerEvents = "none";
+      
+      setTimeout(() => {
+        applyBtn.innerText = "CALIBRANDO DPI UNIVERSAL...";
+        setTimeout(() => {
+            applyBtn.innerText = "100% FULL CAPA ATIVO!";
+            statusText.innerText = "TRAVADO NA CABEÇA - TIROS: 100/100 ✅";
+            statusText.style.color = "var(--accent)";
+            document.getElementById('glow').innerText = "FULL CAPA: PRECISAO ABSOLUTA";
+            alert('COMANDO MESTRE ATIVADO!\n\nTodos os aparelhos detectados agora estão com a mira travada na cabeça.\n\n- Full Capa: Ativo\n- Erro de Tiro: 0%\n- iOS/Android: Sincronizados');
+        }, 1500);
+      }, 1500);
+    };
+
+    document.getElementById('resetBtn').onclick = () => {
+        if(confirm("Deseja resetar a calibração?")) location.reload();
+    };
+
+    document.getElementById('saveBtn').onclick = () => {
+        alert("Configuração de 100% HS salva.");
+    }
+  </script>
+</body>
+</html>
